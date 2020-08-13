@@ -1,0 +1,24 @@
+service:
+  name: quiz-api
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'} #use "dev" by default if there is not a stage defined
+  region: sa-east-1 #deploy to this region and not to default
+  
+functions:
+  getAnswers:
+    handler: src/handlers/getAnswers.handler  #when a GET http request is recived at /answers, this lambda is triggered
+    events:
+      - http:
+          method: GET
+          path: /answers
+
+#use to define custom variables
+#custom:
