@@ -11,7 +11,22 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'} #use "dev" by default if there is not a stage defined
   region: sa-east-1 #deploy to this region and not to default
-  
+ 
+resources:
+  Resources:
+    QuestionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: QuestionsTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: questionId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: questionId
+            KeyType: HASH
+
+
 functions:
   getAnswers:
     handler: src/handlers/getAnswers.handler  #when a GET http request is recived at /answers, this lambda is triggered
