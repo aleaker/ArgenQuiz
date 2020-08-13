@@ -4,6 +4,7 @@ service:
 plugins:
   - serverless-bundle
   - serverless-pseudo-parameters
+  - serverless-iam-roles-per-function #allows to declare iamRoles per lambda 
 
 provider:
   name: aws
@@ -11,10 +12,11 @@ provider:
   memorySize: 256
   stage: ${opt:stage, 'dev'} #use "dev" by default if there is not a stage defined
   region: sa-east-1 #deploy to this region and not to default
+
  
 resources:
   Resources:
-    QuestionsTable:
+    QuestionsTable:                    #dynamodb questions table
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: QuestionsTable
@@ -28,12 +30,24 @@ resources:
 
 
 functions:
-  getAnswers:
-    handler: src/handlers/getAnswers.handler  #when a GET http request is recived at /answers, this lambda is triggered
+  getQuestions:
+    handler: src/handlers/getQuestions.handler  #when a GET http request is recived at /questions, this lambda is triggered
     events:
       - http:
           method: GET
-          path: /answers
+          path: /questions
+
+  createQuestion:
+    handler: src/handlers/createQuestion.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action: dynamodb:PutItem
+        Resource: arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/QuestionsTable
+    events:
+      - http:
+          method: POST
+          path: /admin/createquestion
+
 
 #use to define custom variables
 #custom:
