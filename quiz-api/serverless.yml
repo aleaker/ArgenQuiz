@@ -4,7 +4,7 @@ service:
 plugins:
   - serverless-bundle
   - serverless-pseudo-parameters
-  - serverless-iam-roles-per-function #allows to declare iamRoles per lambda 
+  - serverless-iam-roles-per-function #allows to declare iamRoles per lambda
 
 provider:
   name: aws
@@ -15,15 +15,17 @@ provider:
   environment:
     QUESTIONS_TABLE_NAME: ${self:custom.QuestionsTable.name} #set the table name as an env variable
 
- 
 resources:
   Resources:
-    QuestionsTable:
-      ${file(resources/QuestionsTable.yml):QuestionsTable}                    #dynamodb questions table
+    QuestionsTable: ${file(resources/QuestionsTable.yml):QuestionsTable} #dynamodb questions table
 
 functions:
   getQuestions:
-    handler: src/handlers/getQuestions.handler  #when a GET http request is recived at /questions, this lambda is triggered
+    handler: src/handlers/getQuestions.handler #when a GET http request is recived at /questions, this lambda is triggered
+    iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:Scan
+      Resource: ${self:custom.QuestionsTable.arn}
     events:
       - http:
           method: GET
@@ -31,19 +33,18 @@ functions:
 
   createQuestion:
     handler: src/handlers/createQuestion.handler
-  #  iamRoleStatementsInherit: true
+    #   iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:PutItem
-        Resource: ${self:custom.QuestionsTable.arn} #useing custom variables to get the arn -> arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/QuestionsTable
+        Resource: ${self:custom.QuestionsTable.arn} #using custom variables to get the arn -> arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/QuestionsTable
     events:
       - http:
           method: POST
           path: /admin/createquestion
 
-
 #use to define custom variables
 custom:
-  QuestionsTable:  #aws intrinsec functions allow you to get values without hardcoding (Ref and GetAtt)
+  QuestionsTable: #aws intrinsec functions allow you to get values without hardcoding (Ref and GetAtt)
     name: !Ref QuestionsTable
     arn: !GetAtt QuestionsTable.Arn
