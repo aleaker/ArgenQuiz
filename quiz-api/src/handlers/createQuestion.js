@@ -16,7 +16,7 @@ async function createQuestion(event, context) {
     };
 
     await dynamodb.put({
-        TableName: "QuestionsTable",
+        TableName: process.env.QUESTIONS_TABLE_NAME,
         Item: question,
     }).promise();
 

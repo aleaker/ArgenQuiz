@@ -1,0 +1,11 @@
+QuestionsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: QuestionsTable-${self:provider.stage} #self is serverless the yaml file, use this to have diferent tables for dev and prod
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: questionId
+        AttributeType: S
+    KeySchema:
+      - AttributeName: questionId
+        KeyType: HASH
