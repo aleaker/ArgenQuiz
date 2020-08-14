@@ -24,7 +24,7 @@ functions:
     handler: src/handlers/getQuestions.handler #when a GET http request is recived at /questions, this lambda is triggered
     iamRoleStatements:
     - Effect: Allow
-      Action: dynamodb:Scan
+      Action: dynamodb:BatchGetItem
       Resource: ${self:custom.QuestionsTable.arn}
     events:
       - http:
