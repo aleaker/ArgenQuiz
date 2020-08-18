@@ -4,6 +4,7 @@ import createError from "http-errors";
 import httpErrorHandler from "@middy/http-error-handler";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 import httpEventNormalizer from "@middy/http-event-normalizer";
+import { generateParamsArr } from "../../helpers/generateParamsArr";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -11,12 +12,13 @@ async function getQuestions(event, context) {
   let questions;
 
   const { questionsIds } = event.queryStringParameters;
+  const test = generateParamsArr(questionsIds.split(","));
   //const TABLE_NAME = process.env.QUESTIONS_TABLE_NAME;
 
   const params = {
     RequestItems: {
       [process.env.QUESTIONS_TABLE_NAME]: {
-        Keys: [{ questionId: questionsIds }],
+        Keys: test, //[{ questionId: questionsIds }],
       },
     },
   };
