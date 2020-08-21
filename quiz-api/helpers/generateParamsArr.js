@@ -1,6 +1,6 @@
-export const generateParamsArr = (idsArr) => {
-  const paramsArray = idsArr.map((id) => ({
-    questionId: id,
-  }));
+export const generateParamsArr = (idsArr,numsArr) => {
+  const paramsArray = numsArr.map((num) => (
+     idsArr[num]
+  ));
   return paramsArray;
 };
