@@ -18,7 +18,7 @@ async function getQuestions(event, context) {
   let params = {
     TableName: process.env.QUESTIONS_TABLE_NAME,
     ProjectionExpression: "questionId",
-};
+  };
   try {
     const scanResult = await dynamodb.scan(params).promise();
     questionsIds = scanResult.Items;
@@ -35,16 +35,20 @@ async function getQuestions(event, context) {
     };
     const result = await dynamodb.batchGet(params).promise();
 
-    questions = result.Responses;//.["QuestionsTable-dev"]
+    questions = result.Responses; //.["QuestionsTable-dev"]
   } catch (error) {
     console.error(error);
-    throw new createError.InternalServerError(error);
+    throw new createError.InternalServerError({Msg:error});
   }
 
-  return {
+  const response = {
     statusCode: 200,
-    body: JSON.stringify(questions),
+    headers: {
+      "Access-Control-Allow-Origin": "http://localhost:3000",
+    },
+    body: JSON.stringify(questions[process.env.QUESTIONS_TABLE_NAME]),
   };
+  return response;
 }
 export const handler = middy(getQuestions)
   .use(httpJsonBodyParser())
