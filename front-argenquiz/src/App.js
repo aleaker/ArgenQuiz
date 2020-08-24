@@ -5,38 +5,43 @@ import Starter from "./components/Starter";
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
-  const [number, setNumber] = useState(0);
+  const [questionNumber, setQuestionNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
   const [amount, setAmount] = useState(3);
+  const [hasAnswered, setHasAnswered] = useState(false);
+  const [totalQuestions, setTotalQuestions] = useState();
 
   const start = async () => {
-    const newQuestions = await fetchQuestions(4);
-    setQuestions(newQuestions);
     setLoading(true);
+    const newQuestions = await fetchQuestions(amount);
+    setQuestions(newQuestions);
     setGameOver(false);
     setScore(0);
     setUserAnswers([]);
-    setNumber(0);
+    setHasAnswered(false);
+    setQuestionNumber(0);
     setLoading(false);
   };
 
   const checkAnswer = (e) => {
-    console.log(e.target.value);
     if (!gameOver) {
       const answer = e.target.value;
-      const correct = questions[number].politicianId === answer;
+      const correct = questions[questionNumber].politicianId === answer;
       if (correct) {
         setScore((prev) => prev + 1);
       }
-      setUserAnswers(prev=>[...prev,answer])
-      console.log(userAnswers)
+      setUserAnswers((prev) => [...prev, answer]);
+      if (userAnswers.length >= questionNumber) {
+        setHasAnswered(true);
+      }
     }
   };
 
   const nextQuestion = () => {
-    setNumber(prev=>prev+1)
+    setQuestionNumber((prev) => prev + 1);
+    setHasAnswered(false);
   };
 
   const politiciansNames = [
@@ -56,6 +61,11 @@ const App = () => {
   const fetchQuestions = async (amount) => {
     const api = `https://b9ktant6bd.execute-api.sa-east-1.amazonaws.com/dev/questions?amount=${amount}`;
     const questionsArr = await (await fetch(api)).json(); //awaits for response and then for it to be parsed
+    setTotalQuestions(questionsArr.length);
+    console.log(questionsArr);
+
+    setAmount(questionsArr.length);
+
     return questionsArr.map((question) => ({
       //spreeds the fakesArray, gets the politicians names for each index and adds the correct answer to that array
       ...question,
@@ -68,30 +78,35 @@ const App = () => {
 
   const handleChange = (e) => {
     setAmount(e.target.value);
-    console.log(amount);
   };
 
   return (
     <div className="App">
       <h1>TodosTruchos</h1>
       <p>T_T</p>
-      {gameOver && <Starter start={start} handleChange={handleChange} />}
+      {(gameOver || userAnswers.length === totalQuestions) && (
+        <Starter start={start} handleChange={handleChange} />
+      )}
       {!gameOver && <p>Puntuación: {score}</p>}
       {loading && <p>Cargando...</p>}
       {!loading && !gameOver && (
         <Question
+          source={questions[questionNumber].source}
+          sourceType={questions[questionNumber].sourceType}
+          totalQuestions={totalQuestions}
+          hasAnswered={hasAnswered}
           amount={amount}
-          questionNumber={number + 1}
-          text={questions[number].text}
-          answersArr={questions[number].answersArr}  //combination of fakes and correct answer
-          userAnswers={userAnswers ? userAnswers[number] : undefined}
+          questionNumber={questionNumber + 1}
+          text={questions[questionNumber].text}
+          answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
+          userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
           checkAnswer={checkAnswer}
         />
       )}
       {!gameOver &&
       !loading &&
-      userAnswers.length === number + 1 &&
-      number !== amount - 1 ? (
+      userAnswers.length === questionNumber + 1 &&
+      questionNumber !== totalQuestions - 1 ? (
         <button onClick={nextQuestion}>siguiente</button>
       ) : null}
     </div>

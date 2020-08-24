@@ -1,4 +1,5 @@
 import React from "react";
+import Source from "../components/Source";
 
 const Question = ({
   amount,
@@ -8,20 +9,29 @@ const Question = ({
   sourceType,
   politicianId,
   answersArr,
-  checkAnswer
+  checkAnswer,
+  hasAnswered,
+  totalQuestions,
 }) => (
   <div>
-    <p>Pregunta: {questionNumber} / {amount}</p>
+    <p>
+      Pregunta: {questionNumber} / {totalQuestions}
+    </p>
     <p>{text}</p>
     <div>
-        {answersArr.map(answer=>(
-            <div>
-                <button value={answer} onClick={checkAnswer}>
-                    {answer}
-                </button>
-            </div>
-        ))}
+      {answersArr.map((answer) => (
+        <div>
+          <button
+            disabled={hasAnswered ? true : false}
+            value={answer}
+            onClick={checkAnswer}
+          >
+            {answer}
+          </button>
+        </div>
+      ))}
     </div>
+    {hasAnswered && <Source source={source} sourceType={sourceType} />}
   </div>
 );
 

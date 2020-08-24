@@ -38,7 +38,7 @@ async function getQuestions(event, context) {
     questions = result.Responses; //.["QuestionsTable-dev"]
   } catch (error) {
     console.error(error);
-    throw new createError.InternalServerError(error);
+    throw new createError.InternalServerError({Msg:error});
   }
 
   const response = {
@@ -46,7 +46,7 @@ async function getQuestions(event, context) {
     headers: {
       "Access-Control-Allow-Origin": "http://localhost:3000",
     },
-    body: JSON.stringify(questions["QuestionsTable-dev"]),
+    body: JSON.stringify(questions[process.env.QUESTIONS_TABLE_NAME]),
   };
   return response;
 }
