@@ -12,8 +12,10 @@ const App = () => {
   const [amount, setAmount] = useState(7);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
+  const [isPressed, setIsPressed] = useState(false);
 
   const start = async () => {
+    setIsPressed(true);
     setLoading(true);
     const newQuestions = await fetchQuestions(amount);
     setQuestions(newQuestions);
@@ -23,6 +25,7 @@ const App = () => {
     setHasAnswered(false);
     setQuestionNumber(0);
     setLoading(false);
+    setIsPressed(false);
   };
 
   const checkAnswer = (e) => {
@@ -44,13 +47,7 @@ const App = () => {
     setHasAnswered(false);
   };
 
-  const politiciansNames = [
-    "Macri",
-    "Carrio",
-    "cfk",
-    "Kirchner",
-    "Moreno",
-  ];
+  const politiciansNames = ["Macri", "Carrio", "cfk", "Kirchner", "Moreno"];
 
   const getPoliticiansNames = (arr, answ) => {
     let answArr = arr.map((index) => politiciansNames[index]);
@@ -79,41 +76,77 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-console.log(amount)
+  console.log(amount);
   return (
     <div className="App">
-      <h1>TodosTruchos</h1>
-      <p>T_T</p>
-      {/* ------------------start-------------------- */}
-      {(gameOver || userAnswers.length === totalQuestions) && (
-        <Starter start={start} handleChange={handleChange} />
-      )}
-      {/* ------------------data-------------------- */}
-      {!gameOver && <p>Puntuación: {score}</p>}
-      {loading && <p>Cargando...</p>}
-      {/* ------------------question-------------------- */}
-      {!loading && !gameOver && (
-        <Question
-          source={questions[questionNumber].source}
-          sourceType={questions[questionNumber].sourceType}
-          totalQuestions={totalQuestions}
-          hasAnswered={hasAnswered}
-          amount={amount}
-          questionNumber={questionNumber + 1}
-          text={questions[questionNumber].text}
-          answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
-          userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
-      
-          checkAnswer={checkAnswer}
+      <div className="leftContainer">
+        <img
+          className="fort"
+          src={
+            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
+          }
         />
-      )}
-      {/* ------------------nextQuestion-------------------- */}
-      {!gameOver &&
-      !loading &&
-      userAnswers.length === questionNumber + 1 &&
-      questionNumber !== totalQuestions - 1 ? (
-        <button onClick={nextQuestion}>siguiente</button>
-      ) : null}
+      </div>
+
+      <div className="centerContainer">
+        <div className="titleContainer">
+          <h1>TodosTruchos</h1>
+        </div>
+        <p>T_T</p>
+        {gameOver && (
+          <div className="introContainer">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit
+            </p>
+          </div>
+        )}
+        {/* ------------------start-------------------- */}
+        {(gameOver || userAnswers.length === totalQuestions) && (
+          <Starter
+            start={start}
+            handleChange={handleChange}
+            isPressed={isPressed}
+          />
+        )}
+        {/* ------------------data-------------------- */}
+        {!gameOver && <p>Puntuación: {score}</p>}
+        {loading && <p>Cargando...</p>}
+        {/* ------------------question-------------------- */}
+        {!loading && !gameOver && (
+          <Question
+            className="test"
+            source={questions[questionNumber].source}
+            sourceType={questions[questionNumber].sourceType}
+            totalQuestions={totalQuestions}
+            hasAnswered={hasAnswered}
+            amount={amount}
+            questionNumber={questionNumber + 1}
+            text={questions[questionNumber].text}
+            answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
+            userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
+            checkAnswer={checkAnswer}
+          />
+        )}
+        {/* ------------------nextQuestion-------------------- */}
+        {!gameOver &&
+        !loading &&
+        userAnswers.length === questionNumber + 1 &&
+        questionNumber !== totalQuestions - 1 ? (
+          <button onClick={nextQuestion}>siguiente</button>
+        ) : null}
+      </div>
+      <div className="rightContainer">
+        <img
+          className="fort"
+          src={
+            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
+          }
+        />
+      </div>
     </div>
   );
 };

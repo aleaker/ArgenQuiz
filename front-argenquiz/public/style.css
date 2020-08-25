@@ -1,0 +1,54 @@
+.body {
+  font-family: "Press Start 2P", cursive;
+  background-color: #f8f8f8;
+}
+
+.App{
+    display: flex;
+}
+
+.fort{max-width: 300px;
+margin-top: 100px;}
+/* font-family: 'Russo One', sans-serif;} */
+/* 
+yellow ffba31
+
+Lb 46bedf
+
+b 000005
+
+g f8f8f8
+
+w ffffff */
+
+.centerContainer {
+  display: flex;
+  flex-direction: column;
+}
+/* .starterContainer{
+    display: flex;
+    flex-direction: column;
+} */
+.titleContainer{
+    align-self: center;
+}
+
+.starterContainer {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.sliderContainer {
+  align-self: center;
+}
+.startButton {
+  align-self: center;
+
+}
+.startButton:active {
+outline: none;
+border: none;
+}
+
+.startButton:focus {outline:0;}
