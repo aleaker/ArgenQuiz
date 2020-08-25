@@ -2,7 +2,8 @@ import React from "react";
 
 const Starter = ({ amount, start, handleChange }) => (
   <div>
-    <input onChange={(e) => handleChange(e)}></input>
+      <input type="range" min="3" max="10" value={amount} onChange={(e) => handleChange(e)}></input>
+
     <button onClick={start}>Jugar</button>
   </div>
 );

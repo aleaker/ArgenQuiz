@@ -9,7 +9,7 @@ const App = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-  const [amount, setAmount] = useState(3);
+  const [amount, setAmount] = useState(7);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
 
@@ -45,11 +45,11 @@ const App = () => {
   };
 
   const politiciansNames = [
-    "Maruicio Macri",
-    "Lilita Carrio",
-    "Cristina Kirchner",
-    "Nestor Kirchner",
-    "Guillermo Moreno",
+    "Macri",
+    "Carrio",
+    "cfk",
+    "Kirchner",
+    "Moreno",
   ];
 
   const getPoliticiansNames = (arr, answ) => {
@@ -61,8 +61,8 @@ const App = () => {
   const fetchQuestions = async (amount) => {
     const api = `https://b9ktant6bd.execute-api.sa-east-1.amazonaws.com/dev/questions?amount=${amount}`;
     const questionsArr = await (await fetch(api)).json(); //awaits for response and then for it to be parsed
-    setTotalQuestions(questionsArr.length);
     console.log(questionsArr);
+    setTotalQuestions(questionsArr.length);
 
     setAmount(questionsArr.length);
 
@@ -79,16 +79,19 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-
+console.log(amount)
   return (
     <div className="App">
       <h1>TodosTruchos</h1>
       <p>T_T</p>
+      {/* ------------------start-------------------- */}
       {(gameOver || userAnswers.length === totalQuestions) && (
         <Starter start={start} handleChange={handleChange} />
       )}
+      {/* ------------------data-------------------- */}
       {!gameOver && <p>Puntuación: {score}</p>}
       {loading && <p>Cargando...</p>}
+      {/* ------------------question-------------------- */}
       {!loading && !gameOver && (
         <Question
           source={questions[questionNumber].source}
@@ -100,9 +103,11 @@ const App = () => {
           text={questions[questionNumber].text}
           answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
           userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
+      
           checkAnswer={checkAnswer}
         />
       )}
+      {/* ------------------nextQuestion-------------------- */}
       {!gameOver &&
       !loading &&
       userAnswers.length === questionNumber + 1 &&
