@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
+const siguienteButtonPressed = require("./images/siguientePressed.png");
+const siguienteButton = require("./images/siguiente.png");
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -9,7 +11,7 @@ const App = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-  const [amount, setAmount] = useState(7);
+  const [amount, setAmount] = useState(5);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
   const [isPressed, setIsPressed] = useState(false);
@@ -108,6 +110,7 @@ const App = () => {
         {(gameOver || userAnswers.length === totalQuestions) && (
           <Starter
             start={start}
+            amount={amount}
             handleChange={handleChange}
             isPressed={isPressed}
           />
@@ -136,7 +139,12 @@ const App = () => {
         !loading &&
         userAnswers.length === questionNumber + 1 &&
         questionNumber !== totalQuestions - 1 ? (
-          <button onClick={nextQuestion}>siguiente</button>
+          <input
+            type="image"
+            id="siguienteButton"
+            src={siguienteButton}
+            onClick={nextQuestion}
+          />
         ) : null}
       </div>
       <div className="rightContainer">

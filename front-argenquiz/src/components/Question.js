@@ -12,7 +12,6 @@ const Question = ({
   checkAnswer,
   hasAnswered,
   totalQuestions,
-  
 }) => (
   <div>
     <p>
@@ -23,6 +22,7 @@ const Question = ({
       {answersArr.map((answer) => (
         <div key={answer}>
           <button
+            
             disabled={hasAnswered ? true : false}
             value={answer}
             onClick={checkAnswer}
