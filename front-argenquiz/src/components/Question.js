@@ -1,6 +1,7 @@
 import React from "react";
 import Source from "../components/Source";
 
+
 const Question = ({
   amount,
   questionNumber,
@@ -20,8 +21,9 @@ const Question = ({
     <p>{text}</p>
     <div>
       {answersArr.map((answer) => (
-        <div>
+        <div key={answer}>
           <button
+            
             disabled={hasAnswered ? true : false}
             value={answer}
             onClick={checkAnswer}

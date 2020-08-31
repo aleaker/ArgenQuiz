@@ -6,7 +6,7 @@ const Source = ({ sourceType, source }) => (
       <p>
         Fuente:
         {
-          <a href={`https://${source}`} target="_blank">
+          <a  href={`https://${source}`} rel="noopener noreferrer" target="_blank">
             Link
           </a>
         }

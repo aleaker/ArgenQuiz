@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
-
+import Loading from "./components/Loading";
+const siguienteButtonPressed = require("./images/siguientePressed.png");
+const siguienteButton = require("./images/siguiente.png");
+const logo = require("./images/solNoPixel.png");
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
@@ -9,11 +12,13 @@ const App = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-  const [amount, setAmount] = useState(3);
+  const [amount, setAmount] = useState(5);
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
+  const [isPressed, setIsPressed] = useState(false);
 
   const start = async () => {
+    setIsPressed(true);
     setLoading(true);
     const newQuestions = await fetchQuestions(amount);
     setQuestions(newQuestions);
@@ -23,6 +28,7 @@ const App = () => {
     setHasAnswered(false);
     setQuestionNumber(0);
     setLoading(false);
+    setIsPressed(false);
   };
 
   const checkAnswer = (e) => {
@@ -44,13 +50,7 @@ const App = () => {
     setHasAnswered(false);
   };
 
-  const politiciansNames = [
-    "Maruicio Macri",
-    "Lilita Carrio",
-    "Cristina Kirchner",
-    "Nestor Kirchner",
-    "Guillermo Moreno",
-  ];
+  const politiciansNames = ["Macri", "Carrio", "cfk", "Kirchner", "Moreno"];
 
   const getPoliticiansNames = (arr, answ) => {
     let answArr = arr.map((index) => politiciansNames[index]);
@@ -61,8 +61,8 @@ const App = () => {
   const fetchQuestions = async (amount) => {
     const api = `https://b9ktant6bd.execute-api.sa-east-1.amazonaws.com/dev/questions?amount=${amount}`;
     const questionsArr = await (await fetch(api)).json(); //awaits for response and then for it to be parsed
-    setTotalQuestions(questionsArr.length);
     console.log(questionsArr);
+    setTotalQuestions(questionsArr.length);
 
     setAmount(questionsArr.length);
 
@@ -79,36 +79,84 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-
+  console.log(amount);
   return (
     <div className="App">
-      <h1>TodosTruchos</h1>
-      <p>T_T</p>
-      {(gameOver || userAnswers.length === totalQuestions) && (
-        <Starter start={start} handleChange={handleChange} />
-      )}
-      {!gameOver && <p>Puntuación: {score}</p>}
-      {loading && <p>Cargando...</p>}
-      {!loading && !gameOver && (
-        <Question
-          source={questions[questionNumber].source}
-          sourceType={questions[questionNumber].sourceType}
-          totalQuestions={totalQuestions}
-          hasAnswered={hasAnswered}
-          amount={amount}
-          questionNumber={questionNumber + 1}
-          text={questions[questionNumber].text}
-          answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
-          userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
-          checkAnswer={checkAnswer}
+      <div className="leftContainer">
+        <img
+          className="fort"
+          src={
+            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
+          }
         />
-      )}
-      {!gameOver &&
-      !loading &&
-      userAnswers.length === questionNumber + 1 &&
-      questionNumber !== totalQuestions - 1 ? (
-        <button onClick={nextQuestion}>siguiente</button>
-      ) : null}
+      </div>
+
+      <div className="centerContainer">
+        <div className="titleContainer">
+          <img id="logo" src={logo} / >
+          <div className="logotipo">
+            <h1 className="title">Todos</h1>
+            <h1 className="title">Truchos</h1>
+          </div>
+        </div>
+
+        {gameOver && (
+          <div className="introContainer">
+            <p>
+              ¿Podés adivinar quién fue el autor de cada frase o evento?
+            </p>
+            <p>Elegí la cantidad de preguntas y jugá.</p>
+          </div>
+        )}
+        {/* ------------------start-------------------- */}
+        {(gameOver || userAnswers.length === totalQuestions) && (
+          <Starter
+            start={start}
+            amount={amount}
+            handleChange={handleChange}
+            isPressed={isPressed}
+          />
+        )}
+        {/* ------------------data-------------------- */}
+        {!gameOver && <p>Puntuación: {score}</p>}
+        {loading && <Loading />}
+        {/* ------------------question-------------------- */}
+        {!loading && !gameOver && (
+          <Question
+            className="test"
+            source={questions[questionNumber].source}
+            sourceType={questions[questionNumber].sourceType}
+            totalQuestions={totalQuestions}
+            hasAnswered={hasAnswered}
+            amount={amount}
+            questionNumber={questionNumber + 1}
+            text={questions[questionNumber].text}
+            answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
+            userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
+            checkAnswer={checkAnswer}
+          />
+        )}
+        {/* ------------------nextQuestion-------------------- */}
+        {!gameOver &&
+        !loading &&
+        userAnswers.length === questionNumber + 1 &&
+        questionNumber !== totalQuestions - 1 ? (
+          <input
+            type="image"
+            id="siguienteButton"
+            src={siguienteButton}
+            onClick={nextQuestion}
+          />
+        ) : null}
+      </div>
+      <div className="rightContainer">
+        <img
+          className="fort"
+          src={
+            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
+          }
+        />
+      </div>
     </div>
   );
 };
