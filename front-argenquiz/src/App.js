@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
+import Loading from "./components/Loading";
 const siguienteButtonPressed = require("./images/siguientePressed.png");
 const siguienteButton = require("./images/siguiente.png");
-
+const logo = require("./images/solNoPixel.png");
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
@@ -92,18 +93,19 @@ const App = () => {
 
       <div className="centerContainer">
         <div className="titleContainer">
-          <h1>TodosTruchos</h1>
+          <img id="logo" src={logo} / >
+          <div className="logotipo">
+            <h1 className="title">Todos</h1>
+            <h1 className="title">Truchos</h1>
+          </div>
         </div>
-        <p>T_T</p>
+
         {gameOver && (
           <div className="introContainer">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit
+              ¿Podés adivinar quién fue el autor de cada frase o evento?
             </p>
+            <p>Elegí la cantidad de preguntas y jugá.</p>
           </div>
         )}
         {/* ------------------start-------------------- */}
@@ -117,7 +119,7 @@ const App = () => {
         )}
         {/* ------------------data-------------------- */}
         {!gameOver && <p>Puntuación: {score}</p>}
-        {loading && <p>Cargando...</p>}
+        {loading && <Loading />}
         {/* ------------------question-------------------- */}
         {!loading && !gameOver && (
           <Question
