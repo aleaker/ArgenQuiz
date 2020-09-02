@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
 import Loading from "./components/Loading";
+import Reset from "./components/Reset";
 const siguienteButtonPressed = require("./images/siguientePressed.png");
 const siguienteButton = require("./images/siguiente.png");
 const logo = require("./images/solNoPixel.png");
@@ -16,6 +17,7 @@ const App = () => {
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
   const [isPressed, setIsPressed] = useState(false);
+  const [reset, setReset] = useState(true);
 
   const start = async () => {
     setIsPressed(true);
@@ -28,6 +30,7 @@ const App = () => {
     setHasAnswered(false);
     setQuestionNumber(0);
     setLoading(false);
+    setReset(false);
     setIsPressed(false);
   };
 
@@ -83,7 +86,12 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-  console.log(userAnswers);
+
+  const reStart = () => {
+    setReset(true);
+    setGameOver(true);
+  };
+
   return (
     <div className="App">
       <div className="leftContainer">
@@ -111,7 +119,7 @@ const App = () => {
           </div>
         )}
         {/* ------------------start-------------------- */}
-        {(gameOver || userAnswers.length === totalQuestions) && (
+        {(gameOver || userAnswers.length === totalQuestions) && reset && (
           <Starter
             start={start}
             amount={amount}
@@ -119,6 +127,7 @@ const App = () => {
             isPressed={isPressed}
           />
         )}
+
         {/* ------------------data-------------------- */}
         {/* {!gameOver && <p>Puntuación: {score}</p>} */}
         {loading && <Loading />}
@@ -151,6 +160,10 @@ const App = () => {
             onClick={nextQuestion}
           />
         ) : null}
+        {gameOver ||
+          (userAnswers.length === totalQuestions && !reset && (
+            <Reset reStart={reStart} />
+          ))}
       </div>
       <div className="rightContainer">
         <img
