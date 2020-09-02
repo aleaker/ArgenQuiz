@@ -31,14 +31,13 @@ const App = () => {
     setIsPressed(false);
   };
 
-  const checkAnswer = (e) => {
+  const checkAnswer = (answer) => {
     if (!gameOver) {
-      const answer = e.target.value;
       const correct = questions[questionNumber].politicianId === answer;
       if (correct) {
         setScore((prev) => prev + 1);
       }
-      setUserAnswers((prev) => [...prev, answer]);
+      setUserAnswers((prev) => [...prev, correct]);
       if (userAnswers.length >= questionNumber) {
         setHasAnswered(true);
       }
@@ -50,7 +49,13 @@ const App = () => {
     setHasAnswered(false);
   };
 
-  const politiciansNames = ["Macri", "Carrio", "cfk", "Kirchner", "Moreno"];
+  const politiciansNames = [
+    "Miauricio Macri",
+    "Alita Carrio",
+    "Cretina Fernandez",
+    "Carlito Menem",
+    "Moyerno Moreno",
+  ];
 
   const getPoliticiansNames = (arr, answ) => {
     let answArr = arr.map((index) => politiciansNames[index]);
@@ -61,7 +66,6 @@ const App = () => {
   const fetchQuestions = async (amount) => {
     const api = `https://b9ktant6bd.execute-api.sa-east-1.amazonaws.com/dev/questions?amount=${amount}`;
     const questionsArr = await (await fetch(api)).json(); //awaits for response and then for it to be parsed
-    console.log(questionsArr);
     setTotalQuestions(questionsArr.length);
 
     setAmount(questionsArr.length);
@@ -79,7 +83,7 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-  console.log(amount);
+  console.log(userAnswers);
   return (
     <div className="App">
       <div className="leftContainer">
@@ -93,7 +97,7 @@ const App = () => {
 
       <div className="centerContainer">
         <div className="titleContainer">
-          <img id="logo" src={logo} / >
+          <img id="logo" src={logo} />
           <div className="logotipo">
             <h1 className="title">Todos</h1>
             <h1 className="title">Truchos</h1>
@@ -102,9 +106,7 @@ const App = () => {
 
         {gameOver && (
           <div className="introContainer">
-            <p>
-              ¿Podés adivinar quién fue el autor de cada frase o evento?
-            </p>
+            <p>¿Podés adivinar quién fue el autor de cada frase o evento?</p>
             <p>Elegí la cantidad de preguntas y jugá.</p>
           </div>
         )}
@@ -118,7 +120,7 @@ const App = () => {
           />
         )}
         {/* ------------------data-------------------- */}
-        {!gameOver && <p>Puntuación: {score}</p>}
+        {/* {!gameOver && <p>Puntuación: {score}</p>} */}
         {loading && <Loading />}
         {/* ------------------question-------------------- */}
         {!loading && !gameOver && (
@@ -132,8 +134,9 @@ const App = () => {
             questionNumber={questionNumber + 1}
             text={questions[questionNumber].text}
             answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
-            userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
+            userAnswers={userAnswers ? userAnswers : undefined}
             checkAnswer={checkAnswer}
+            politicianId={questions[questionNumber].politicianId}
           />
         )}
         {/* ------------------nextQuestion-------------------- */}

@@ -36,19 +36,21 @@ w ffffff */
 .centerContainer {
   display: flex;
   flex-direction: column;
+
+  align-items: center;
+  width: 85%;
 }
-/* .starterContainer{
-    display: flex;
-    flex-direction: column;
-} */
+
 .titleContainer {
   align-self: center;
   display: flex;
+  margin-bottom: 10px;
 }
 
 .starterContainer {
   display: flex;
   flex-direction: column;
+  margin-top: 35px;
 }
 
 .sliderContainer {
@@ -135,9 +137,17 @@ border-color: black;
 }
 
 .introContainer {
-  width: 90%;
-  margin: 50px 25px 40px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+  justify-content: center; */
+
+  width: 100%;
+  margin: 40px 0px 30px;
   line-height: 1.6;
+}
+.introContainer > p {
+  justify-self: center;
 }
 
 .logotipo {
@@ -233,9 +243,67 @@ border-color: black;
   right: 0;
 }
 
+.answersContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.singleAnswerContainer {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+.disabled {
+  pointer-events: none;
+}
+.gray {
+  opacity: 0.4;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+}
+
+.politicianImg {
+  align-self: center;
+}
+
+.politicianButton {
+  background: none;
+  font-family: "Press Start 2P", cursive;
+  border: none;
+  font-size: 8px;
+  margin-top: 8px;
+}
+
+.progresionContainer {
+  display: flex;
+}
+.progresionIcon {
+  width: 25px;
+  height: 25px;
+}
+
+.questionContainer {
+  margin-top: 60px;
+}
+
 @media screen and (min-width: 768px) {
   .introContainer {
-    width: 660px;
+    width: 85%;
+    justify-self: center;
+    align-items: center;
+  }
+
+  .introContainer > p:first-child {
+    margin-bottom: 0px;
+  }
+
+  .questionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    width: 80%;
   }
 
   .body {
