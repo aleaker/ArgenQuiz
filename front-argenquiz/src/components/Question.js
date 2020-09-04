@@ -14,6 +14,8 @@ const Question = ({
   hasAnswered,
   totalQuestions,
   userAnswers,
+  videoClosed,
+  closeVideo
 }) => (
   <div className="questionContainer">
     <ProgesionBar 
@@ -44,7 +46,7 @@ const Question = ({
         </div>
       ))}
     </div>
-    {hasAnswered && <Source source={source} sourceType={sourceType} />}
+    {hasAnswered && <Source source={source} sourceType={sourceType} videoClosed={videoClosed} closeVideo={closeVideo} />}
   </div>
 );
 

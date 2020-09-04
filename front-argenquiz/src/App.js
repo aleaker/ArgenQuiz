@@ -18,6 +18,7 @@ const App = () => {
   const [totalQuestions, setTotalQuestions] = useState();
   const [isPressed, setIsPressed] = useState(false);
   const [reset, setReset] = useState(true);
+  const [videoClosed,setVideoClosed] = useState(true);
 
   const start = async () => {
     setIsPressed(true);
@@ -50,6 +51,7 @@ const App = () => {
   const nextQuestion = () => {
     setQuestionNumber((prev) => prev + 1);
     setHasAnswered(false);
+    setVideoClosed(false);
   };
 
   const politiciansNames = [
@@ -91,6 +93,10 @@ const App = () => {
     setReset(true);
     setGameOver(true);
   };
+
+  const closeVideo = ()=>{
+    setVideoClosed(true);
+  }
 
   return (
     <div className="App">
@@ -146,6 +152,8 @@ const App = () => {
             userAnswers={userAnswers ? userAnswers : undefined}
             checkAnswer={checkAnswer}
             politicianId={questions[questionNumber].politicianId}
+            videoClosed={videoClosed}
+            closeVideo={closeVideo}
           />
         )}
         {/* ------------------nextQuestion-------------------- */}
