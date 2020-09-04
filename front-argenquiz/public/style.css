@@ -299,8 +299,14 @@ w ffffff */
   bottom: 0;
   width: 80%;
   height: 40%;
-  border: 5px dashed #dd0000;
+
 }
+
+#closeVideoButton{
+display: none;
+}
+
+.videoBorder{display: none;}
 
 @media screen and (min-width: 768px) {
   .introContainer {
@@ -323,6 +329,30 @@ w ffffff */
   .questionContainer > p {
     justify-self: center;
     align-items: center;
+  }
+
+  #closeVideoButton{
+    display: block;
+    position: absolute;
+    margin: auto;
+    height: 36px;
+    margin-top: 130px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .videoBorder {
+    display: block;
+    width:700px;
+    height: 450px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .video {
