@@ -4,7 +4,7 @@ export const generateRandomNums = (arrLength, amount) => {
   if (amount > 10) amount = 10;
   if (arrLength < amount) amount = arrLength;
   while (randomNumsArr.length < amount) {
-    let n = Math.floor(Math.random() * (arrLength + 1));
+    let n = Math.floor(Math.random() * (arrLength));
     if (!randomNumsArr.includes(n)) {
       randomNumsArr.push(n);
     }
