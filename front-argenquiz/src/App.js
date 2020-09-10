@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
 import Loading from "./components/Loading";
@@ -18,7 +18,9 @@ const App = () => {
   const [totalQuestions, setTotalQuestions] = useState();
   const [isPressed, setIsPressed] = useState(false);
   const [reset, setReset] = useState(true);
-  const [videoClosed,setVideoClosed] = useState(true);
+  const [videoClosed,setVideoClosed] = useState(false);
+
+
 
   const start = async () => {
     setIsPressed(true);
@@ -35,6 +37,13 @@ const App = () => {
     setIsPressed(false);
   };
 
+useEffect(()=>{
+  if(hasAnswered) window.scrollTo(0, 1000);
+})
+
+
+
+  
   const checkAnswer = (answer) => {
     if (!gameOver) {
       const correct = questions[questionNumber].politicianId === answer;
@@ -98,16 +107,13 @@ const App = () => {
     setVideoClosed(true);
   }
 
+  
+
+
+
   return (
-    <div className="App">
-      <div className="leftContainer">
-        <img
-          className="fort"
-          src={
-            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
-          }
-        />
-      </div>
+    <div className="App" >
+
 
       <div className="centerContainer">
         <div className="titleContainer">
@@ -163,7 +169,7 @@ const App = () => {
         questionNumber !== totalQuestions - 1 ? (
           <input
             type="image"
-            id="siguienteButton"
+            id="continuarButton"
             src={siguienteButton}
             onClick={nextQuestion}
           />
@@ -173,14 +179,8 @@ const App = () => {
             <Reset reStart={reStart} />
           ))}
       </div>
-      <div className="rightContainer">
-        <img
-          className="fort"
-          src={
-            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
-          }
-        />
-      </div>
+      <div id="footer"></div>
+      
     </div>
   );
 };

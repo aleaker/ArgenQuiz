@@ -2,10 +2,14 @@ import React from "react";
 import videoBorder from "../images/videoBorder.png";
 import cerrarButton from "../images/cerrar.png";
 
+
+
 const Source = ({ sourceType, source, videoClosed, closeVideo }) => (
+  
   <div>
+
     {sourceType === "text" ? (
-      <p>
+      <p className="sourceContainer">
         Fuente:
         {
           <a

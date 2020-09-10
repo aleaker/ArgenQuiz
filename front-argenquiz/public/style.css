@@ -107,8 +107,9 @@ w ffffff */
   cursor: pointer;
 }
 
-#siguienteButton {
-  max-width: 114px;
+#continuarButton {
+margin-top: 10px;
+  width: 185px;
 }
 
 .introContainer {
@@ -221,12 +222,15 @@ w ffffff */
 .answersContainer {
   display: flex;
   justify-content: space-around;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .singleAnswerContainer {
+  flex: 0 50%;
   display: flex;
   flex-direction: column;
-  width: 25%;
+  margin-bottom: 50px;
 }
 
 .disabled {
@@ -246,12 +250,20 @@ w ffffff */
   background: none;
   font-family: "Press Start 2P", cursive;
   border: none;
-  font-size: 8px;
+  font-size: 12px;
   margin-top: 8px;
+  line-height: 1.6;
 }
 
 .questionContainer {
-  margin-top: 60px;
+  margin-top: 20px;
+}
+
+.questionContainer > p {
+  text-align: left;
+  justify-self: center;
+  margin: 45px 10px 45px 10px;
+  line-height: 1.6;
 }
 
 .progresionContainer {
@@ -299,14 +311,27 @@ w ffffff */
   bottom: 0;
   width: 80%;
   height: 40%;
-
 }
 
-#closeVideoButton{
-display: none;
+#closeVideoButton {
+  display: block;
+  position: absolute;
+  margin: auto;
+  height: 36px;
+  margin-top: 180px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-.videoBorder{display: none;}
+.videoBorder {
+  display: none;
+}
+
+.sourceContainer {
+  margin: 0 0 35px;
+}
 
 @media screen and (min-width: 768px) {
   .introContainer {
@@ -331,21 +356,17 @@ display: none;
     align-items: center;
   }
 
-  #closeVideoButton{
-    display: block;
-    position: absolute;
-    margin: auto;
-    height: 36px;
-    margin-top: 130px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  #closeVideoButton {
+    margin-top: 140px;
+  }
+
+  #continuarButton {
+    width: auto;
   }
 
   .videoBorder {
     display: block;
-    width:700px;
+    width: 700px;
     height: 450px;
     position: absolute;
     margin: auto;
@@ -359,6 +380,17 @@ display: none;
     width: 600px;
     height: 300px;
   }
+
+  .answersContainer {
+    flex-wrap: nowrap;
+  }
+
+  .singleAnswerContainer {
+    display: flex;
+    width: 25%;
+  }
+
+
 
   .body {
     margin-top: 60px;
