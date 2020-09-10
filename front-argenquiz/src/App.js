@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Question from "./components/Question";
 import Starter from "./components/Starter";
 import Loading from "./components/Loading";
+import Reset from "./components/Reset";
 const siguienteButtonPressed = require("./images/siguientePressed.png");
 const siguienteButton = require("./images/siguiente.png");
 const logo = require("./images/solNoPixel.png");
@@ -16,6 +17,10 @@ const App = () => {
   const [hasAnswered, setHasAnswered] = useState(false);
   const [totalQuestions, setTotalQuestions] = useState();
   const [isPressed, setIsPressed] = useState(false);
+  const [reset, setReset] = useState(true);
+  const [videoClosed,setVideoClosed] = useState(false);
+
+
 
   const start = async () => {
     setIsPressed(true);
@@ -28,17 +33,24 @@ const App = () => {
     setHasAnswered(false);
     setQuestionNumber(0);
     setLoading(false);
+    setReset(false);
     setIsPressed(false);
   };
 
-  const checkAnswer = (e) => {
+useEffect(()=>{
+  if(hasAnswered) window.scrollTo(0, 1000);
+})
+
+
+
+  
+  const checkAnswer = (answer) => {
     if (!gameOver) {
-      const answer = e.target.value;
       const correct = questions[questionNumber].politicianId === answer;
       if (correct) {
         setScore((prev) => prev + 1);
       }
-      setUserAnswers((prev) => [...prev, answer]);
+      setUserAnswers((prev) => [...prev, correct]);
       if (userAnswers.length >= questionNumber) {
         setHasAnswered(true);
       }
@@ -48,9 +60,16 @@ const App = () => {
   const nextQuestion = () => {
     setQuestionNumber((prev) => prev + 1);
     setHasAnswered(false);
+    setVideoClosed(false);
   };
 
-  const politiciansNames = ["Macri", "Carrio", "cfk", "Kirchner", "Moreno"];
+  const politiciansNames = [
+    "Miauricio Macri",
+    "Alita Carrio",
+    "Cretina Fernandez",
+    "Carlito Menem",
+    "Moyerno Moreno",
+  ];
 
   const getPoliticiansNames = (arr, answ) => {
     let answArr = arr.map((index) => politiciansNames[index]);
@@ -61,7 +80,6 @@ const App = () => {
   const fetchQuestions = async (amount) => {
     const api = `https://b9ktant6bd.execute-api.sa-east-1.amazonaws.com/dev/questions?amount=${amount}`;
     const questionsArr = await (await fetch(api)).json(); //awaits for response and then for it to be parsed
-    console.log(questionsArr);
     setTotalQuestions(questionsArr.length);
 
     setAmount(questionsArr.length);
@@ -79,21 +97,27 @@ const App = () => {
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
-  console.log(amount);
+
+  const reStart = () => {
+    setReset(true);
+    setGameOver(true);
+  };
+
+  const closeVideo = ()=>{
+    setVideoClosed(true);
+  }
+
+  
+
+
+
   return (
-    <div className="App">
-      <div className="leftContainer">
-        <img
-          className="fort"
-          src={
-            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
-          }
-        />
-      </div>
+    <div className="App" >
+
 
       <div className="centerContainer">
         <div className="titleContainer">
-          <img id="logo" src={logo} / >
+          <img id="logo" src={logo} />
           <div className="logotipo">
             <h1 className="title">Todos</h1>
             <h1 className="title">Truchos</h1>
@@ -102,14 +126,12 @@ const App = () => {
 
         {gameOver && (
           <div className="introContainer">
-            <p>
-              ¿Podés adivinar quién fue el autor de cada frase o evento?
-            </p>
+            <p>¿Podés adivinar quién fue el autor de cada frase o evento?</p>
             <p>Elegí la cantidad de preguntas y jugá.</p>
           </div>
         )}
         {/* ------------------start-------------------- */}
-        {(gameOver || userAnswers.length === totalQuestions) && (
+        {(gameOver || userAnswers.length === totalQuestions) && reset && (
           <Starter
             start={start}
             amount={amount}
@@ -117,8 +139,9 @@ const App = () => {
             isPressed={isPressed}
           />
         )}
+
         {/* ------------------data-------------------- */}
-        {!gameOver && <p>Puntuación: {score}</p>}
+        {/* {!gameOver && <p>Puntuación: {score}</p>} */}
         {loading && <Loading />}
         {/* ------------------question-------------------- */}
         {!loading && !gameOver && (
@@ -132,8 +155,11 @@ const App = () => {
             questionNumber={questionNumber + 1}
             text={questions[questionNumber].text}
             answersArr={questions[questionNumber].answersArr} //combination of fakes and correct answer
-            userAnswers={userAnswers ? userAnswers[questionNumber] : undefined}
+            userAnswers={userAnswers ? userAnswers : undefined}
             checkAnswer={checkAnswer}
+            politicianId={questions[questionNumber].politicianId}
+            videoClosed={videoClosed}
+            closeVideo={closeVideo}
           />
         )}
         {/* ------------------nextQuestion-------------------- */}
@@ -143,20 +169,18 @@ const App = () => {
         questionNumber !== totalQuestions - 1 ? (
           <input
             type="image"
-            id="siguienteButton"
+            id="continuarButton"
             src={siguienteButton}
             onClick={nextQuestion}
           />
         ) : null}
+        {gameOver ||
+          (userAnswers.length === totalQuestions && !reset && (
+            <Reset reStart={reStart} />
+          ))}
       </div>
-      <div className="rightContainer">
-        <img
-          className="fort"
-          src={
-            "https://64.media.tumblr.com/872ec93cfbff2554cc4dbe84e27fc64b/tumblr_p3cofgka9h1wyvojio1_1280.gifv"
-          }
-        />
-      </div>
+      <div id="footer"></div>
+      
     </div>
   );
 };
